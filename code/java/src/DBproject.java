@@ -454,7 +454,7 @@ public class DBproject{
 	public static void MakeAppointment(DBproject esql) {//4
 		// Given a patient, a doctor and an appointment of the doctor that s/he wants to take, add an appointment to the DB
 		Scanner in = new Scanner (System.in);
-		int apptID=-1;  int docID=-1; int pID=-1; String pname = "";
+		int apptID=-1;  int docID=-1; int pID=-1; String pname = ""; int a = -1;
 		boolean loop = true;
 
 		while(loop) {
@@ -465,7 +465,7 @@ public class DBproject{
 			try {
 			if (esql.executeQuery(dupcheck1) == 0) {
 				System.out.println("This patient does not exist. Would you like to add a new patient (1) or re enter patient name (2)?");
-				int a = Integer.parseInt(in.nextLine());
+				a = Integer.parseInt(in.nextLine());
 				if(a==1) {
 					AddPatient(esql);
 				} 
@@ -540,7 +540,7 @@ public class DBproject{
 
 		String avaliable = "SELECT appnt_ID FROM Appointment WHERE appnt_ID = '"+apptID+"' AND status = 'AV' ";
 		try {
-			if(esql.executeQuery(available)>0){
+			if(esql.executeQuery(avaliable)>0){
 				String AVtoAC = "UPDATE Appointment SET status = 'AC' WHERE appnt_ID = '"+apptID+"' ";
 				try{
 					esql.executeUpdate(AVtoAC);
@@ -550,16 +550,16 @@ public class DBproject{
 					esql.executeUpdate(NewAppt);
 				} catch(SQLException e){e.printStackTrace();}
 
-				String updateSearch = "INSERT INTO searches VALUES (0,'"+pid+"','"+apptID+"')";
+				String updateSearch = "INSERT INTO searches VALUES (0,'"+pID+"','"+apptID+"')";
 				try{
 					esql.executeUpdate(updateSearch);
 				}catch(SQLException e){e.printStackTrace();}
 
-				String count = "SELECT pid FROM Searches WHERE pid = '"+pid+"' ";
+				String count = "SELECT pid FROM Searches WHERE pid = '"+pID+"' ";
 				
 				try{
-					int a = esql.executeQuery(count);
-				}catch(SQLException e){e.printStackTace();}
+					a = esql.executeQuery(count);
+				}catch(SQLException e){e.printStackTrace();}
 
 				String patientUpdate = "UPDATE Patient SET number_of_appts = '"+a+"' ";
 				try{
