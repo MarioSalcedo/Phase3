@@ -505,7 +505,7 @@ public class DBproject{
 		}		
 		/*System.out.println(date2);*/
 		try {
-			String psqlQuery = "SELECT D.doctor_ID, A.adate, A.appnt_ID, A.status  FROM Appointment A, Doctor D WHERE D.doctor_ID = '"+docid+"' AND A.adate >= '"+date+"' AND A.adate =< '"+date2+"' AND ( A.status = ‘AC’ OR A.status = ‘AV’) ORDER BY A.appnt_ID";
+			String psqlQuery = "SELECT A.adate, A.appnt_ID, A.status  FROM Appointment A, Doctor D, has_appointment H WHERE H.doctor_id = '"+docid+"' AND A.adate >= '"+date+"' AND A.adate <= '"+date2+"' AND H.appt_id = A.appnt_ID AND H.doctor_id = D.doctor_ID AND (A.status = 'AC' OR A.status = 'AV') ORDER BY A.appnt_ID";	
 		esql.executeQueryAndPrintResult(psqlQuery);
 		} catch(Exception e) {
 			System.out.println("This doctor ID does not exist");
