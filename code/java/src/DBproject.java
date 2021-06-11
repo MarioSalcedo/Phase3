@@ -538,7 +538,37 @@ public class DBproject{
                         e.printStackTrace();
                 }
 
+		String avaliable = "SELECT appnt_ID FROM Appointment WHERE appnt_ID = '"+apptID+"' AND status = 'AV' ";
+		try {
+			if(esql.executeQuery(available)>0){
+				String AVtoAC = "UPDATE Appointment SET status = 'AC' WHERE appnt_ID = '"+apptID+"' ";
+				try{
+					esql.executeUpdate(AVtoAC);
+				}catch(SQLException e){e.printStackTrace();}
+				String NewAppt = "INSERT INTO has_appointment VALUES ('"+apptID+"', '"+docID+"')";
+				try{
+					esql.executeUpdate(NewAppt);
+				} catch(SQLException e){e.printStackTrace();}
 
+				String updateSearch = "INSERT INTO searches VALUES (0,'"+pid+"','"+apptID+"')";
+				try{
+					esql.executeUpdate(updateSearch);
+				}catch(SQLException e){e.printStackTrace();}
+
+				String count = "SELECT pid FROM Searches WHERE pid = '"+pid+"' ";
+				
+				try{
+					int a = esql.executeQuery(count);
+				}catch(SQLException e){e.printStackTace();}
+
+				String patientUpdate = "UPDATE Patient SET number_of_appts = '"+a+"' ";
+				try{
+					esql.executeUpdate(patientUpdate);
+				}catch(SQLException e){e.printStackTrace();}
+
+			}
+		}
+		catch(SQLException e) { e.printStackTrace(); }
 	}
 
 	public static void ListAppointmentsOfDoctor(DBproject esql) {//5
