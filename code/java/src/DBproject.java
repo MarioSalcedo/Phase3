@@ -457,7 +457,63 @@ public class DBproject{
 
 	public static void ListAppointmentsOfDoctor(DBproject esql) {//5
 		// For a doctor ID and a date range, find the list of active and available appointments of the doctor
+		Scanner in = new Scanner (System.in);
+		int docid = 0; boolean loop = true;
+		Date date = null; Date date2 = null;	
+		while(loop) {
+			System.out.println("Please input your doctor ID"); 
+			try {
+				docid = Integer.parseInt(in.nextLine());
+				loop = false;
+			}
+			catch(Exception e) {
+				System.out.println("Invalid doctor ID!");
+				System.out.println(e);
+			}
+		}
+		/*System.out.println(docid);*/
+
+		loop = true;
+		while(loop) {
+			System.out.println("Insert start date");
+			String line = in.nextLine();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			try {
+    				date = dateFormat.parse(line);
+    				loop = false;
+			}  catch (ParseException e) {
+				System.out.println("Invalid date!");
+    				e.printStackTrace();
+			}
+		}
+		/*System.out.println(date);*/
+		loop = true;
+		while(loop) {
+			System.out.println("Insert end date");
+			String line2 = in.nextLine();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+    			date2 = dateFormat.parse(line2);
+			if (date.before(date2) || date.equals(date2)) {
+				loop = false; break;
+			}
+			System.out.println("Invalid date, please choose a date after " + date);
+		} catch (ParseException e) {
+			System.out.println("Invalid date!");
+    			e.printStackTrace();	
+		}
+		}		
+		/*System.out.println(date2);*/
+		try {
+			String psqlQuery = "SELECT D.doctor_ID, A.adate, A.appnt_ID, A.status  FROM Appointment A, Doctor D WHERE D.doctor_ID = '"+docid+"' AND A.adate >= '"+date+"' AND A.adate =< '"+date2+"' AND ( A.status = ‘AC’ OR A.status = ‘AV’) ORDER BY A.appnt_ID";
+		esql.executeQueryAndPrintResult(psqlQuery);
+		} catch(Exception e) {
+			System.out.println("This doctor ID does not exist");
+			System.out.println(e);
+		}
 	}
+
+
 
 	public static void ListAvailableAppointmentsOfDepartment(DBproject esql) {//6
 		// For a department name and a specific date, find the list of available appointments of the department
