@@ -322,10 +322,10 @@ public class DBproject{
 			catch(SQLException e) {
 				e.printStackTrace();
 			}
-			
 			System.out.println("Please input the doctors department ID: ");
 			int did = Integer.parseInt(in.nextLine());
-
+			System.out.println(did);
+			System.out.println(docid);
 			String putIn = "INSERT INTO Doctor (doctor_ID, name,specialty, did) VALUES ('"+docid+"', '"+dname+"', '"+spec+"', '"+did+"')";
 			try{
 				esql.executeUpdate(putIn);
