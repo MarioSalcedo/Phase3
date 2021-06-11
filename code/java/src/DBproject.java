@@ -534,7 +534,7 @@ public class DBproject{
 			}
 		}
 		try {
-		String psqlQuery = "SELECT A.adate, A.appnt_ID FROM Department D, Doctor T, Appointment A has_appointment H WHERE D.name = '"+deptname+"' AND T.did = D.dept_ID AND T.doctor_ID = H.doctor_id AND H.appt_id = A.appnt_ID AND A.adate = '"+date+"' AND A.status = ‘AV’ ORDER BY A.appnt_ID"; 
+		String psqlQuery = "SELECT A.adate, A.appnt_ID FROM Department D, Doctor T, Appointment A, has_appointment H WHERE D.name = '"+deptname+"' AND T.did = D.dept_ID AND T.doctor_ID = H.doctor_id AND H.appt_id = A.appnt_ID AND A.adate = '"+date+"' AND A.status = ‘AV’ ORDER BY A.appnt_ID"; 
 		esql.executeQueryAndPrintResult(psqlQuery);
 		} catch(Exception e) {
 			System.out.println("This department ID does not exist");
