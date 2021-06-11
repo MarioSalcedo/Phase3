@@ -526,5 +526,23 @@ public class DBproject{
 	
 	public static void FindPatientsCountWithStatus(DBproject esql) {//8
 		// Find how many patients per doctor there are with a given status (i.e. PA, AC, AV, WL) and list that number per doctor.
+		Scanner in = new Scanner(System.in);
+		System.out.println("Please give a status (AV, AC, WL, PA): ");
+		String stat = in.nextLine();
+		int i = 0;
+		String doc = "SELECT* FROM Doctor";
+		try{
+		while(i < esql.executeQuery(doc)){
+			String getdoc = "SELECT name FROM Doctor WHERE doctor_ID = '"+i+"'";
+			try{
+			esql.executeAndPrintResult(getdoc);
+			}catch(SQLException e) {e.printStackTrace();}
+			string getcount = "SELECT * FROM Appointment A, has_appointment H WHERE A.status = '"+stat+"' AND H.doctor_id='"+i+"' AND H.appt_id = A.appnt_ID";
+			try{ 
+			System.out.println(" has " + esql.executeQuery(getcount) " + '"+stat+"'");
+			}catch(SQLException e) {e.printStackTrace();}
+			++i;
+		}
+		}catch(SQLException e) {e.printStackTrace();}
 	}
 }
