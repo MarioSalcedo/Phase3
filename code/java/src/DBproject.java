@@ -454,12 +454,12 @@ public class DBproject{
 	public static void MakeAppointment(DBproject esql) {//4
 		// Given a patient, a doctor and an appointment of the doctor that s/he wants to take, add an appointment to the DB
 		Scanner in = new Scanner (System.in);
-		int apptID=-1;  int docID=-1;
+		int apptID=-1;  int docID=-1; int pID=-1; String pname = "";
 		boolean loop = true;
 
 		while(loop) {
 			System.out.print("Please input the patient name (first and last): ");
-			String pname = in.nextLine();
+			pname = in.nextLine();
 			String dupcheck1 = "SELECT name FROM Patient WHERE name = '"+pname+"'";
 
 			try {
@@ -475,6 +475,27 @@ public class DBproject{
                         	e.printStackTrace();
 			}	
 		}
+		
+		loop = true;
+		while(loop) {
+                        System.out.print("Please input the patient ID: ");
+
+			try { pID = Integer.parseInt(in.nextLine()); }
+			catch (Exception e) { e.printStackTrace(); }
+
+
+                        String check1 = "SELECT patient_ID FROM Patient WHERE name = '"+pname+"' AND patient_ID = '"+pID+"' ";
+                        try {
+                        if (esql.executeQuery(check1) == 0) {
+                                System.out.println("This patient ID does not match our records");
+                        }
+                        else { loop = false; }
+                        } catch (SQLException e) {
+                                e.printStackTrace();
+                        }
+                }
+
+
 
 		loop = true;
 		while(loop) {
@@ -495,6 +516,28 @@ public class DBproject{
 		}
 		}catch (SQLException e){
 		e.printStackTrace();}
+
+		loop = true;
+                while(loop) {
+                        System.out.print("Insert Appointment ID: ");
+                        try {
+                                apptID = Integer.parseInt(in.nextLine());
+                                loop = false;
+                        } catch (Exception e) {
+                                System.out.println("Invalid Appointment ID");
+                                e.printStackTrace();
+                        }
+                }
+                String dupcheck3 = "SELECT appnt_ID FROM Appointment WHERE appnt_ID = '"+apptID+"' AND (status = 'AV' OR status = 'AC' OR status = 'WL')";
+                try {
+                if (esql.executeQuery(dupcheck3) == 0) {
+                        System.out.println("This appointment either doesn't exist or has already passed!");
+                        return;
+                }
+                } catch (SQLException e) {
+                        e.printStackTrace();
+                }
+
 
 	}
 
