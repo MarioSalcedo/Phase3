@@ -393,6 +393,61 @@ public class DBproject{
 	}
 
 	public static void AddAppointment(DBproject esql) {//3
+		Scanner in = new Scanner (System.in);
+		boolean loop = true; Date date2 = null;
+		while (loop) {
+		System.out.println("Please input the date of your desired appointment (MM/DD/YYYY):");
+		String date = in.nextLine();
+            	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		try {
+    			date2 = dateFormat.parse(date);	
+			loop = false;
+		} catch (ParseException e) {
+    			e.printStackTrace();
+		}
+		System.out.println(date2); 
+		}
+	
+		System.out.println("Please assign a time slot of your appointment: ");
+		System.out.println("Start Time ");
+		String value1 = in.nextLine(); String[] arraySplit = value1.split(":");
+		int num1 = Integer.parseInt(arraySplit[0]); int num2 = Integer.parseInt(arraySplit[1]);
+		boolean isBeg = true;
+		if ((num1 >= 8 && num1 <=16) && num2 == 0) { isBeg = false; }
+		while (isBeg) {
+			System.out.println("Invalid Input. Please input a start time no earlier than 8:00 and no later than 16:00. Note: appointments only start at an hour sharp.");
+			value1 = in.nextLine(); arraySplit = value1.split(":");
+			num1 = Integer.parseInt(arraySplit[0]); num2 = Integer.parseInt(arraySplit[1]);
+			if ((num1 >= 8 && num1 <=16) && num2 == 0) { isBeg = false; }
+		}
+		System.out.println("End Time (Can't be earlier or equal to your start time and no later than 17:00)");
+		String value2 = in.nextLine(); String[] arraySplit2 = value2.split(":");
+		int num3 = Integer.parseInt(arraySplit2[0]); 
+		while (num3 <= num1 || num3 > 17) {
+			System.out.println("Invalid Input. Please input an end time no earlier than your           start time and no later than 17:00");
+			value2 = in.nextLine(); arraySplit2 = value2.split(":");
+			num3 = Integer.parseInt(arraySplit2[0]);
+		}
+		if (num3 == 17) { arraySplit2[1] = "00"; }
+		String begin = String.valueOf(num1); String end = String.valueOf(num2);
+		String timeslot = value1+"-"+arraySplit2[0]+":"+arraySplit2[1];
+		System.out.println(timeslot);
+
+		String dupcheck = "SELECT adate FROM Appointment WHERE time_slot = '"+timeslot+"' AND adate = '"+date2+"'";
+		try {
+		if (esql.executeQuery(dupcheck) > 0) {
+			System.out.println("This time slot is already taken!");
+			return;
+		} else {
+			String count = "SELECT appnt_ID FROM Appointment";
+			int appntid = esql.executeQuery(count);
+			String putIn = "INSERT INTO Appointment VALUES ('"+appntid+"','"+date2+"','"+timeslot+"','AV')";
+			try { esql.executeUpdate(putIn); } catch (SQLException e) { e.printStackTrace(); }
+		}
+		} catch (SQLException e) {
+                        e.printStackTrace();
+                }
+	return;
 	}
 
 
