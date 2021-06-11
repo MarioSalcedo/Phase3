@@ -521,6 +521,80 @@ public class DBproject{
 
 	public static void ListStatusNumberOfAppointmentsPerDoctor(DBproject esql) {//7
 		// Count number of different types of appointments per doctors and list them in descending order
+		int i = 0;
+		int k = 0;
+		int a = -1;
+		int b = -1;
+		int c = -1;
+		int d = -1;
+		int uAV = 0;
+		int uAC = 0;
+		int uWL = 0;
+		int uPA = 0;
+		String doc = "SELECT* FROM Doctor";
+		try{
+		while(i < esql.executeQuery(doc)){
+			String getdoc = "SELECT name FROM Doctor WHERE doctor_ID = '"+i+"'";
+			try{
+			esql.executeQueryAndPrintResult(getdoc);
+			}catch(SQLException e) {e.printStackTrace();}
+			String getAV = "SELECT * FROM Appointment A, has_appointment H WHERE A.status = 'AV' AND H.doctor_id='"+i+"' AND H.appt_id=A.appnt_ID";
+			String getAC = "SELECT * FROM Appointment A, has_appointment H WHERE A.status = 'AC' AND H.doctor_id='"+i+"' AND H.appt_id=A.appnt_ID";
+			String getWL = "SELECT * FROM Appointment A, has_appointment H WHERE A.status = 'WL' AND H.doctor_id='"+i+"' AND H.appt_id=A.appnt_ID";
+			String getPA = "SELECT * FROM Appointment A, has_appointment H WHERE A.status = 'PA' AND H.doctor_id='"+i+"' AND H.appt_id=A.appnt_ID";
+			try{
+			a = esql.executeQuery(getAV);
+			} catch(SQLException e) {e.printStackTrace();}
+			try{
+			b = esql.executeQuery(getAC);
+			} catch(SQLException e) {e.printStackTrace();}
+			try{
+			c = esql.executeQuery(getWL);
+			}catch(SQLException e) {e.printStackTrace();}
+			try{
+			d = esql.executeQuery(getPA);
+			}catch(SQLException e) {e.printStackTrace();}
+			ArrayList<Integer> orderdown = new ArrayList<Integer>();
+			orderdown.add(a);
+			orderdown.add(b);
+			orderdown.add(c);
+			orderdown.add(d);
+			Collections.sort(orderdown, Collections.reverseOrder());
+			while( k < 4){
+				if(orderdown.get(k) == 0){}
+				else if(orderdown.get(k) == a && uAV == 0){
+					System.out.print(orderdown.get(k));
+					System.out.print(" AV ");
+					uAV = 1;
+				}
+				else if(orderdown.get(k) == b && uAC == 0){
+					System.out.print(orderdown.get(k));
+					System.out.print(" AC ");
+					uAC = 1;
+				}
+				else if(orderdown.get(k) == c && uWL == 0){
+					System.out.print(orderdown.get(k));
+					System.out.print(" WL ");
+					uWL = 1;
+				}
+				else if(orderdown.get(k) == d && uPA == 0){
+					System.out.print(orderdown.get(k));
+					System.out.print(" PA ");
+					uPA  = 1;
+				}
+				else{System.out.print("what?howd you get here?");}
+				++k;
+			}
+			System.out.println();
+			k=0;
+			++i;
+			uAV = 0;
+			uAC = 0;
+			uWL = 0;
+			uPA = 0;
+		}
+		} catch(SQLException e) {e.printStackTrace();}
+			System.out.println();
 	}
 
 	
@@ -535,11 +609,11 @@ public class DBproject{
 		while(i < esql.executeQuery(doc)){
 			String getdoc = "SELECT name FROM Doctor WHERE doctor_ID = '"+i+"'";
 			try{
-			esql.executeAndPrintResult(getdoc);
+			esql.executeQueryAndPrintResult(getdoc);
 			}catch(SQLException e) {e.printStackTrace();}
-			string getcount = "SELECT * FROM Appointment A, has_appointment H WHERE A.status = '"+stat+"' AND H.doctor_id='"+i+"' AND H.appt_id = A.appnt_ID";
+			String getcount = "SELECT * FROM Appointment A, has_appointment H WHERE A.status = '"+stat+"' AND H.doctor_id='"+i+"' AND H.appt_id = A.appnt_ID";
 			try{ 
-			System.out.println(" has " + esql.executeQuery(getcount) " + '"+stat+"'");
+			System.out.println(" has " + esql.executeQuery(getcount) + "'"+stat+"'");
 			}catch(SQLException e) {e.printStackTrace();}
 			++i;
 		}
