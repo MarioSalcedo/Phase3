@@ -561,7 +561,7 @@ public class DBproject{
 					a = esql.executeQuery(count);
 				}catch(SQLException e){e.printStackTrace();}
 
-				String patientUpdate = "UPDATE Patient SET number_of_appts = '"+a+"' ";
+				String patientUpdate = "UPDATE Patient SET number_of_appts = '"+a+"' WHERE patient_ID = '"+pID+"'";
 				try{
 					esql.executeUpdate(patientUpdate);
 				}catch(SQLException e){e.printStackTrace();}
