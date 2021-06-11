@@ -453,6 +453,28 @@ public class DBproject{
 
 	public static void MakeAppointment(DBproject esql) {//4
 		// Given a patient, a doctor and an appointment of the doctor that s/he wants to take, add an appointment to the DB
+		Scanner in = new Scanner (System.in);
+		int apptID;  int docID;
+		boolean loop = true;
+
+		while(loop) {
+			System.out.print("Please input the patient name (first and last): ");
+			String pname = in.nextLine();
+			String dupcheck1 = "SELECT name FROM Patient WHERE name = '"+pname+"'";
+
+			try {
+			if (esql.executeQuery(dupcheck1) == 0) {
+				System.out.println("This patient does not exist. Would you like to add a new patient (1) or re enter patient name (2)?");
+				int a = Integer.parseInt(in.nextLine());
+				if(a==1) {
+					AddPatient(esql);
+				} 
+			}
+			else { loop = false; }
+			} catch (SQLException e) {
+                        	e.printStackTrace();
+			}	
+		}
 	}
 
 	public static void ListAppointmentsOfDoctor(DBproject esql) {//5
