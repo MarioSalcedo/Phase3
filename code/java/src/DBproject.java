@@ -569,6 +569,70 @@ public class DBproject{
 			}
 		}
 		catch(SQLException e) { e.printStackTrace(); }
+		
+		String active= "SELECT appnt_ID FROM Appointment WHERE appnt_ID = '"+apptID+"' AND status = 'AC' ";
+		try {
+			if(esql.executeQuery(active)>0){
+				String ACtoWL = "UPDATE Appointment SET status = 'WL' WHERE appnt_ID = '"+apptID+"' ";
+				try{
+					esql.executeUpdate(ACtoWL);
+				}catch(SQLException e){e.printStackTrace();}
+				String NewAppt = "INSERT INTO has_appointment VALUES ('"+apptID+"', '"+docID+"')";
+				try{
+					esql.executeUpdate(NewAppt);
+				} catch(SQLException e){e.printStackTrace();}
+
+				String updateSearch = "INSERT INTO searches VALUES (0,'"+pID+"','"+apptID+"')";
+				try{
+					esql.executeUpdate(updateSearch);
+				}catch(SQLException e){e.printStackTrace();}
+
+				String count = "SELECT pid FROM Searches WHERE pid = '"+pID+"' ";
+				
+				try{
+					a = esql.executeQuery(count);
+				}catch(SQLException e){e.printStackTrace();}
+
+				String patientUpdate = "UPDATE Patient SET number_of_appts = '"+a+"' WHERE patient_ID = '"+pID+"'";
+				try{
+					esql.executeUpdate(patientUpdate);
+				}catch(SQLException e){e.printStackTrace();}
+
+			}
+		}
+		catch (SQLException e) { e.printStackTrace(); }
+
+
+		String waitlist= "SELECT appnt_ID FROM Appointment WHERE appnt_ID = '"+apptID+"' AND status = 'WL' ";
+		try {
+			if(esql.executeQuery(waitlist)>0){
+				String WLtoWL = "UPDATE Appointment SET status = 'WL' WHERE appnt_ID = '"+apptID+"' ";
+				try{
+					esql.executeUpdate(WLtoWL);
+				}catch(SQLException e){e.printStackTrace();}
+				String NewAppt = "INSERT INTO has_appointment VALUES ('"+apptID+"', '"+docID+"')";
+				try{
+					esql.executeUpdate(NewAppt);
+				} catch(SQLException e){e.printStackTrace();}
+
+				String updateSearch = "INSERT INTO searches VALUES (0,'"+pID+"','"+apptID+"')";
+				try{
+					esql.executeUpdate(updateSearch);
+				}catch(SQLException e){e.printStackTrace();}
+
+				String count = "SELECT pid FROM Searches WHERE pid = '"+pID+"' ";
+				
+				try{
+					a = esql.executeQuery(count);
+				}catch(SQLException e){e.printStackTrace();}
+
+				String patientUpdate = "UPDATE Patient SET number_of_appts = '"+a+"' WHERE patient_ID = '"+pID+"'";
+				try{
+					esql.executeUpdate(patientUpdate);
+				}catch(SQLException e){e.printStackTrace();}
+			}
+		}
+		catch(SQLException e) { e.printStackTrace(); }
 	}
 
 	public static void ListAppointmentsOfDoctor(DBproject esql) {//5
