@@ -517,6 +517,30 @@ public class DBproject{
 
 	public static void ListAvailableAppointmentsOfDepartment(DBproject esql) {//6
 		// For a department name and a specific date, find the list of available appointments of the department
+		Scanner in = new Scanner (System.in);
+		String deptname; boolean loop = true; Date date = null;
+		System.out.println("Please input your department name: "); 
+		deptname = in.nextLine();
+		while(loop) {
+			System.out.println("Insert a date");
+			String line = in.nextLine();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			try {
+    				date = dateFormat.parse(line);
+    				loop = false;
+			} catch (ParseException e) {
+			System.out.println("Invalid date!");
+    			e.printStackTrace();
+			}
+		}
+		try {
+		String psqlQuery = "SELECT A.adate, A.appnt_ID FROM Department D, Doctor T, Appointment A has_appointment H WHERE D.name = '"+deptname+"' AND T.did = D.dept_ID AND T.doctor_ID = H.doctor_id AND H.appt_id = A.appnt_ID AND A.adate = '"+date+"' AND A.status = ‘AV’ ORDER BY A.appnt_ID"; 
+		esql.executeQueryAndPrintResult(psqlQuery);
+		} catch(Exception e) {
+			System.out.println("This department ID does not exist");
+			System.out.println(e);
+		}
+
 	}
 
 	public static void ListStatusNumberOfAppointmentsPerDoctor(DBproject esql) {//7
