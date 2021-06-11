@@ -454,7 +454,7 @@ public class DBproject{
 	public static void MakeAppointment(DBproject esql) {//4
 		// Given a patient, a doctor and an appointment of the doctor that s/he wants to take, add an appointment to the DB
 		Scanner in = new Scanner (System.in);
-		int apptID;  int docID;
+		int apptID=-1;  int docID=-1;
 		boolean loop = true;
 
 		while(loop) {
@@ -475,6 +475,27 @@ public class DBproject{
                         	e.printStackTrace();
 			}	
 		}
+
+		loop = true;
+		while(loop) {
+			System.out.print("Insert Doctor ID: ");
+			try {
+				docID = Integer.parseInt(in.nextLine());
+				loop = false;
+			} catch (NumberFormatException e) {
+    			System.out.println("Invalid Doctor ID");
+			e.printStackTrace();
+			}
+      		}
+		String dupcheck2 = "SELECT doctor_ID FROM Doctor WHERE doctor_ID = '"+docID+"' ";
+		try{
+		if (esql.executeQuery(dupcheck2) == 0) {
+			System.out.println("This doctor doesn't exist!");
+			return;
+		}
+		}catch (SQLException e){
+		e.printStackTrace();}
+
 	}
 
 	public static void ListAppointmentsOfDoctor(DBproject esql) {//5
