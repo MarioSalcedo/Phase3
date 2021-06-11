@@ -342,6 +342,54 @@ public class DBproject{
 	}
 
 	public static void AddPatient(DBproject esql) {//2
+		Scanner in = new Scanner(System.in);
+		char g; int pid = 0;
+		System.out.println("Please input the patient name (first and last): ");
+		String pname = in.nextLine();
+		System.out.println("Please input the gender (M/F): ");
+		String gender = in.nextLine();
+
+		while(!(Objects.equals(gender,"M")) && !(Objects.equals(gender,"F")) ) {
+			System.out.println("Invalid Input. Please input the gender (M/F): ");
+			gender = in.nextLine();
+		}
+		g = gender.charAt(0);
+		System.out.println("Please input age: ");
+		int page = Integer.parseInt(in.nextLine());
+
+		System.out.println("Please input address: ");
+		String padd = in.nextLine();
+
+		String dupcheck = "SELECT name FROM Patient WHERE name = '"+pname+"' AND gtype = '"+g+"' AND age = '"+page+"' AND address = '"+padd+"' ";
+
+
+		try {
+
+		if (esql.executeQuery(dupcheck)>0){
+			System.out.println("This Patient already exists!");
+			return;}
+		else{
+			String count = "SELECT patient_ID FROM Patient";
+			try {
+				pid = esql.executeQuery(count);
+			}
+			catch(SQLException e) {
+                        	e.printStackTrace();
+			}
+			String putIn = "INSERT INTO Patient VALUES ('"+pid+" ', '"+pname+"', '"+g+"', '"+page+"', '"+padd+"', 0)";
+			
+			try {
+			esql.executeUpdate(putIn);
+			} catch (SQLException e) {
+                        e.printStackTrace();
+                	}
+
+		}
+		} catch(SQLException e) {
+			e.printStackTrace();	
+		}
+		return;
+
 	}
 
 	public static void AddAppointment(DBproject esql) {//3
